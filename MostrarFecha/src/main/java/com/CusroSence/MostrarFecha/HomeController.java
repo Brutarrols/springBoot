@@ -8,19 +8,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
-	LocalDateTime date = LocalDateTime.now();
+	
 	
 	@RequestMapping("/fecha")
 	public String fecha(Model model)
 	{
-		model.addAttribute("fecha", this.date);
+		LocalDateTime date = LocalDateTime.now();
+		model.addAttribute("fecha", date);
 		return "fecha.jsp";
 	}
 	
 	@RequestMapping("/hora")
 	public String hora(Model model)
 	{
-		model.addAttribute("fecha", this.date);
+		LocalDateTime date = LocalDateTime.now();
+		model.addAttribute("fecha", date);
 		return "hora.jsp";
 	}
 }
