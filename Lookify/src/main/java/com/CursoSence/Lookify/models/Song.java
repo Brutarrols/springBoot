@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
@@ -22,11 +23,11 @@ public class Song {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Min(5)
+	@Size(min=5)
 	private String titulo;
-	@Min(5)
+	@Size(min=5)
 	private String artista;
-	@Size(min=1, max=10)
+	@Max(10)
 	private int clasificacion;
 	
 	@Column(updatable=false)

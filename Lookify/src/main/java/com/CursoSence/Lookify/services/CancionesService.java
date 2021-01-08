@@ -47,12 +47,12 @@ public class CancionesService {
 		}
 	}
 	
-	/*public List<Song> topTen()
+	public List<Song> topTen()
 	{
 		List<Song> cancionesTop = repositorio.findAllOrderByClasificacionDesc();
 		
 		return cancionesTop;
-	}*/
+	}
 	
 	public List<Song> buscarArtista(String artista)
 	{

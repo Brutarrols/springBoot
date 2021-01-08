@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.CursoSence.Lookify.models.Song;
 import com.CursoSence.Lookify.services.CancionesService;
@@ -25,12 +26,6 @@ public class CancionesController {
 		this.servicio = servicio;
 	}
 	
-	@RequestMapping("/")
-	public String inicio()
-	{
-		return "index.html";
-	}
-	
 	@RequestMapping("/dashboard")
 	public String dashboard(Model model)
 	{
@@ -41,21 +36,22 @@ public class CancionesController {
 		return "dashboard.jsp";
 	}
 	
-	/*@RequestMapping("/search/topTen")
+	@RequestMapping("/search/topTen")
 	public String topTen(Model model)
 	{
 		List<Song> canciones = servicio.topTen();
 		
-		model.addAttribute("cancioens",canciones);
+		model.addAttribute("canciones",canciones);
 		
 		return "topTen.jsp";
 	}
 	
-	@RequestMapping("/search/{artista}")
-	public String cancionesArtista(@PathVariable("artista")String artista, Model model)
+	@RequestMapping("/search")
+	public String cancionesArtista(@RequestParam(value="artista")String artista, Model model)
 	{
 		List<Song> canciones = servicio.buscarArtista(artista);
 		
+		model.addAttribute("artista", artista);
 		model.addAttribute("canciones",canciones);
 		
 		return "artista.jsp";
@@ -67,16 +63,16 @@ public class CancionesController {
 		model.addAttribute("cancion", cancion);
 		
 		return "showCancion.jsp";
-	}*/
+	}
 	
 	@RequestMapping("/songs/new")
-	public String nuevaCancion(@Valid @ModelAttribute("song")Song cancion)
+	public String nuevaCancion(@Valid @ModelAttribute("song")Song song)
 	{
 		return "newSong.jsp";
 	}
 	
 	@RequestMapping(value="/songs/new", method=RequestMethod.POST)
-	public String newCancion(@Valid @ModelAttribute("song") Song cancion, BindingResult result)
+	public String newCancion(@Valid @ModelAttribute("song") Song song, BindingResult result)
 	{
 		if(result.hasErrors())
 		{
@@ -84,6 +80,7 @@ public class CancionesController {
 		}
 		else
 		{
+			servicio.crearCancion(song);
 			return "redirect:/dashboard";
 		}
 	}
