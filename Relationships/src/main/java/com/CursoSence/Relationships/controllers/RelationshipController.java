@@ -1,5 +1,7 @@
 package com.CursoSence.Relationships.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +61,7 @@ public class RelationshipController {
 	@RequestMapping(value="/licenses/new", method=RequestMethod.POST)
 	public String saveLicense(@Valid @ModelAttribute("license")License license, BindingResult result)
 	{		
-		license.setNumber(license.getPerson().getId().toString());
+		license.setNumber(Long.toString(license.getPerson().getId()));		
 		if(result.hasErrors())
 		{
 			return "newLicense.jsp";
@@ -75,7 +77,7 @@ public class RelationshipController {
 	@RequestMapping("/persons/{id}")
 	public String view(@PathVariable("id")Long id, Model model)
 	{
-		Optional<Person> p = servicio.viewPerson(id);
+		License p = servicio.viewLicence(id);
 		
 		model.addAttribute("persona",p);
 		

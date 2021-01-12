@@ -36,9 +36,19 @@ public class RelationshipService {
 		return repositoryL.save(l);
 	}
 	
-	public Optional<License> viewLicence(Long id)
+	public License viewLicence(Long id)
 	{
-		return repositoryL.findById(id);
+		Optional<License> l = repositoryL.findById(id);
+		
+		if(l.isPresent())
+		{
+			return l.get();
+		}
+		else
+		{
+			return null;
+		}
+		
 	}
 	
 	public Optional<Person> viewPerson(Long id)
