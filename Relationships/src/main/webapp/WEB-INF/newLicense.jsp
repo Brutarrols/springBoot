@@ -14,8 +14,8 @@
         <form:label path="person">Person</form:label>
         <form:errors path="person"/>
         <form:select path="person">
-        	<form:option value="none">---Select---</form:option>
-        	<form:options items="${listPerson}"></form:options>
+        	<form:option value=" ">---Select---</form:option>
+        	<form:options items="${listPerson}"/>
         </form:select>
     </p>
     <p>
