@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -31,6 +33,10 @@ public class Student {
 	
 	@OneToOne(mappedBy="student", cascade= CascadeType.ALL, fetch=FetchType.LAZY)
 	private Contact contact;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="dormitory_id")
+	private Dormitory dormitory;
 	
 	public Student()
 	{
@@ -84,6 +90,18 @@ public class Student {
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
+	
+	
+
+	public Dormitory getDormitory() {
+		return dormitory;
+	}
+
+
+	public void setDormitory(Dormitory dormitory) {
+		this.dormitory = dormitory;
+	}
+
 
 	@PrePersist
 	protected void onCreate()
