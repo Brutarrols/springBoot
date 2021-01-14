@@ -1,6 +1,7 @@
 package com.CursoSence.ListaEstudiantes.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +40,14 @@ public class Student {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="dormitory_id")
 	private Dormitory dormitory;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "classes_students",
+			joinColumns = @JoinColumn(name="class_id"),
+			inverseJoinColumns = @JoinColumn(name="student_id")
+			)
+	private List<Class> classes;
 	
 	public Student()
 	{
@@ -100,6 +111,17 @@ public class Student {
 
 	public void setDormitory(Dormitory dormitory) {
 		this.dormitory = dormitory;
+	}
+	
+	
+
+	public List<Class> getClasses() {
+		return classes;
+	}
+
+
+	public void setClasses(List<Class> classes) {
+		this.classes = classes;
 	}
 
 
