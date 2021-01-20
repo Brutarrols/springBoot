@@ -2,6 +2,7 @@ package com.CursoSence.DojosNinjas.controllers;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,15 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.CursoSence.DojosNinjas.models.Dojo;
 import com.CursoSence.DojosNinjas.models.Ninja;
 import com.CursoSence.DojosNinjas.services.DojoNinjasService;
+import com.CursoSence.DojosNinjas.services.NinjaService;
 
 @Controller
 public class DojosNinjasController {
 	
 	private final DojoNinjasService servicio;
+	private final NinjaService ninjaService;
 	
-	public DojosNinjasController(DojoNinjasService servicio)
+	public DojosNinjasController(DojoNinjasService servicio, NinjaService ninjaService)
 	{
 		this.servicio = servicio;
+		this.ninjaService = ninjaService;
 	}
 	
 	@RequestMapping("/dojos/new")
@@ -72,5 +76,17 @@ public class DojosNinjasController {
 		
 		return "view.jsp";
 	}
+	
+	@RequestMapping("/pages/{pageNumber}")
+	public String getNinjasPerPage(Model model, @PathVariable("pageNumber") int pageNumber) {
+	    //Tenemos que restar 1 porque las páginas iterables empiezan con índice 0. Esto es para que nuestros enlaces puedan mostrarse desde 1...maxPage(última página) 
+	    Page<Ninja> ninjas = ninjaService.ninjasPerPage(pageNumber - 1);
+	    //Total número de páginas que tenemos
+	    int totalPages = ninjas.getTotalPages();
+	    model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("ninjas", ninjas);
+	    return "ninjas.jsp";
+	}
+
 	
 }
