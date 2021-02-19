@@ -13,81 +13,78 @@ import com.CursoSence.WaterBnB.repositories.PoolRepository;
 import com.CursoSence.WaterBnB.repositories.ReviewRepository;
 import com.CursoSence.WaterBnB.repositories.RoleRepository;
 import com.CursoSence.WaterBnB.repositories.UserRepository;
+import com.CursoSence.WaterBnB.repositories.RoleRepository;
 
 @Service
 public class WService {
 	
-	private final UserRepository userRepo;
-	private final ReviewRepository reviewRepo;
-	private final RoleRepository roleRepo;
-	private final PoolRepository poolRepo;
 	private final BCryptPasswordEncoder bCrypt;
 	
-	public WService(UserRepository userRepo, ReviewRepository reviewRepo, RoleRepository roleRepo, PoolRepository poolRepo, BCryptPasswordEncoder bCrypt)
+	private final PoolRepository poolR;
+	private final ReviewRepository reviewR;
+	private final RoleRepository rolesR;
+	private final UserRepository userR;
+	
+	public WService(PoolRepository poolR, ReviewRepository reviewR, RoleRepository rolesR, UserRepository userR, BCryptPasswordEncoder bCrypt)
 	{
-		this.userRepo = userRepo;
-		this.reviewRepo = reviewRepo;
-		this.roleRepo = roleRepo;
-		this.poolRepo = poolRepo;
+		this.poolR = poolR;
+		this.reviewR = reviewR;
+		this.rolesR = rolesR;
+		this.userR = userR;
 		this.bCrypt = bCrypt;
 	}
 	
 	public void registrerHost(User user)
 	{
 		user.setPassword(bCrypt.encode(user.getPassword()));
-		user.setRole(roleRepo.findRoleByName("ROLE_HOST"));
-		userRepo.save(user);
+		user.setRole(rolesR.findRoleByName("ROLE_HOST"));
+		userR.save(user);
 	}
 	
 	public void registrerGuest(User user)
 	{
 		user.setPassword(bCrypt.encode(user.getPassword()));
-		user.setRole(roleRepo.findRoleByName("ROLE_GUEST"));
-		userRepo.save(user);
+		user.setRole(rolesR.findRoleByName("ROLE_GUEST"));
+		userR.save(user);
 	}
 	
-	public Pool createPool(Pool pool)
+	public Pool savePool(Pool pool)
 	{
-		return poolRepo.save(pool);
+		return poolR.save(pool);
 	}
 	
-	public Review createReview(Review review)
+	public Review saveReview(Review review)
 	{
-		return reviewRepo.save(review);
+		return reviewR.save(review);
 	}
 	
-	public User findUserbyEmail(String email)
+	public List<Pool> searchPools(String busqueda)
 	{
-		return userRepo.findUserByEmail(email);
+		return poolR.findByAddressContaining(busqueda);
 	}
 	
-	public List<Pool> allPool()
+	public User searchUser(Long id)
 	{
-		return (List<Pool>) poolRepo.findAll();
-	}
-	
-	public List<Pool> findUserByAddress(String location)
-	{
-		return poolRepo.findByAddressContaining(location);
-	}
-
-	public User userById(Long id)
-	{
-		Optional<User> u = userRepo.findById(id);
+		Optional<User> u = userR.findById(id);
 		
-		if(u.isPresent())
-		{
-			return u.get();
-		}
-		else
+		if(u.isEmpty())
 		{
 			return null;
 		}
+		else
+		{
+			return u.get();
+		}
 	}
 	
-	public Pool findPool(Long id)
+	public User searchByEmail(String email)
 	{
-		Optional<Pool> p = poolRepo.findById(id); 
+		return userR.findByEmail(email);
+	}
+	
+	public Pool searchPool(Long id)
+	{
+		Optional<Pool> p = poolR.findById(id);
 		
 		if(p.isPresent())
 		{
